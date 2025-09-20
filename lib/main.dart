@@ -14,9 +14,9 @@ void setupFVP() {
     options['video.decoders'] = ['AMediaCodec:surface=1', 'FFmpeg'];
   } else if (Platform.isIOS || Platform.isMacOS) {
     options['video.decoders'] = [
-      //  'VT:copy=0:async=1:hardware=1:realTime=1:efficient=0',
+      'VT:copy=0:async=1:hardware=1:realTime=1:efficient=0',
       'dav1d:threads=0:tile_threads=4',
-      //  'FFmpeg',
+      'FFmpeg',
     ];
   } else if (Platform.isLinux) {
     options['video.decoders'] = ['VAAPI', 'FFmpeg'];
@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const XTypeGroup typeGroup = XTypeGroup(
         label: 'videos',
 
-        extensions: <String>['mp4', 'mov', 'avi', 'mkv'],
+        extensions: <String>['mp4', 'mov', 'avi', 'mkv', 'webm'],
         uniformTypeIdentifiers: ['public.movie'],
       );
       final XFile? file = await openFile(
