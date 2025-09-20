@@ -27,13 +27,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   bool showLeftSide = true;
   bool _areControlsVisible = true;
+  bool _isScaled = false;
 
   @override
   void initState() {
     super.initState();
     _initializeVideoPlayer();
-    // _listenToGyroscope();
-    // _startUpdateTimer();
   }
 
   void _initializeVideoPlayer() async {
@@ -74,6 +73,14 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
+  void _toggleScaling() {
+    setState(() {
+      _isScaled = !_isScaled;
+      _lookAroundOffset = 0.0;
+      _verticalLookOffset = 0.0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,14 +101,16 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     builder: (context, constraints) {
                       final double parentWidth = constraints.maxWidth;
 
-                      const double scaleFactor = 2.0;
+                      // Use scaling factor only if _isScaled is true
+                      final double scaleFactor = _isScaled ? 2.0 : 1.0;
 
-                      final double baseOffset = showLeftSide
-                          ? (parentWidth * scaleFactor) / 4.0
-                          : -(parentWidth * scaleFactor) / 4.0;
-
-                      final double totalHorizontalOffset =
-                          baseOffset + _lookAroundOffset;
+                      // Calculate offset only if scaling is enabled
+                      final double totalHorizontalOffset = _isScaled
+                          ? (showLeftSide
+                                    ? (parentWidth * scaleFactor) / 4.0
+                                    : -(parentWidth * scaleFactor) / 4.0) +
+                                _lookAroundOffset
+                          : _lookAroundOffset;
 
                       return Transform.translate(
                         offset: Offset(
@@ -153,12 +162,23 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                       style: IconButton.styleFrom(
                         backgroundColor: Colors.grey.withValues(alpha: 0.5),
                       ),
-                      onPressed: () {
-                        showLeftSide = !showLeftSide;
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.swap_horiz, color: Colors.white),
+                      onPressed: _toggleScaling,
+                      icon: Icon(
+                        _isScaled ? Icons.fullscreen_exit : Icons.fullscreen,
+                        color: Colors.white,
+                      ),
                     ),
+                    if (_isScaled)
+                      IconButton.filled(
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.grey.withValues(alpha: 0.5),
+                        ),
+                        onPressed: () {
+                          showLeftSide = !showLeftSide;
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.swap_horiz, color: Colors.white),
+                      ),
                   ],
                 ),
               ),
