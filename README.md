@@ -1,5 +1,5 @@
 # fvp with dav1d
-Example on how to use dav1d with the fvp package.
+Example on how to use [dav1d](https://www.videolan.org/projects/dav1d.html) with the [fvp package](https://pub.dev/packages/fvp).
 
 ## Steps for iOS:
 1. Download and unzip [libdav1d.dll/libdav1d.dylib/dav1d.framework/libdav1dso](https://sourceforge.net/projects/mdk-sdk/files/deps/dep.7z/download) to support av1 software decoding.
@@ -21,7 +21,10 @@ Pod::Spec.new do |s|
 end
 ```
 
-5. Add this dependency declaration into the Podfile under `target 'Runner' do`.
+5. Add this dependency declaration into the Podfile under `target 'Runner' do`:
 ```ruby
 pod 'dav1d', :path => '.', :configurations => ['Release']
 ```
+
+>[!IMPORTANT]
+> Does not work on `ios-simulator`.
