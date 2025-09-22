@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  file_selector: ^1.0.4
+  # file_selector: ^1.0.4
+  file_picker: ^10.3.3
   image_picker: ^1.2.0
 
   sensors_plus: ^7.0.0

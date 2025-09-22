@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:file_selector/file_selector.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player_app/video_player_view.dart';
 import 'package:fvp/fvp.dart' as fvp;
@@ -11,7 +11,11 @@ void setupFVP() {
   if (Platform.isWindows) {
     options['video.decoders'] = ['MFT:d3d=11', 'FFmpeg'];
   } else if (Platform.isAndroid) {
-    options['video.decoders'] = ['AMediaCodec:surface=1', 'FFmpeg'];
+    options['video.decoders'] = [
+      'AMediaCodec:surface=1',
+      'dav1d:threads=0:tile_threads=4',
+      'FFmpeg',
+    ];
   } else if (Platform.isIOS || Platform.isMacOS) {
     options['video.decoders'] = [
       'VT:copy=0:async=1:hardware=1:realTime=1:efficient=0',
@@ -62,24 +66,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   incrementCounter() async {
     try {
-      const XTypeGroup typeGroup = XTypeGroup(
-        label: 'videos',
-
-        extensions: <String>['mp4', 'mov', 'avi', 'mkv', 'webm'],
-        uniformTypeIdentifiers: ['public.movie'],
-      );
-      final XFile? file = await openFile(
-        acceptedTypeGroups: <XTypeGroup>[typeGroup],
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['mp4', 'mov', 'avi', 'mkv', 'webm'],
       );
 
       if (file != null) {
-        print('Selected video file path: ${file.path}');
+        print('Selected video file path: ${file.files.first.path}');
         if (!mounted) return;
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) {
-              return VideoPlayerScreen(videoPath: file.path);
+              return VideoPlayerScreen(videoPath: file.files.first.path!);
             },
           ),
         );

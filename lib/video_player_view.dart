@@ -36,7 +36,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   void _initializeVideoPlayer() async {
-    _controller = VideoPlayerController.file(File(widget.videoPath));
+    _controller = VideoPlayerController.file(
+      File(widget.videoPath),
+      videoPlayerOptions: VideoPlayerOptions(),
+    );
 
     await _controller.initialize();
 
@@ -101,10 +104,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     builder: (context, constraints) {
                       final double parentWidth = constraints.maxWidth;
 
-                      // Use scaling factor only if _isScaled is true
                       final double scaleFactor = _isScaled ? 2.0 : 1.0;
 
-                      // Calculate offset only if scaling is enabled
                       final double totalHorizontalOffset = _isScaled
                           ? (showLeftSide
                                     ? (parentWidth * scaleFactor) / 4.0

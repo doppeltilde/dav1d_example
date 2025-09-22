@@ -7,6 +7,6 @@ Pod::Spec.new do |s|
   s.license      = 'BSD'
   s.author       = 'VideoLAN'
   s.ios.deployment_target = '9.0'
-  s.vendored_frameworks = 'Frameworks/dav1d.framework'
+  s.vendored_frameworks = ['frameworks/dav1d.framework', 'frameworks/ass.framework']
   s.source = { :path => '.' }
 end
